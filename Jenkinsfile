@@ -5,11 +5,13 @@ podTemplate(
   volumes: []) {
     node(POD_LABEL) {
         stage('Checkout Code & Build Image') {  
-            NAME = "myapp"
-            current_date_time=$(date)
-            VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
-            IMAGE = "${NAME}:${VERSION}"
-            echo "Running current_date_time-${VERSION} on ${env.JENKINS_URL}"
+            container('buildkit') {
+                NAME = "myapp"
+                current_date_time=$(date)
+                VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
+                IMAGE = "${NAME}:${VERSION}"
+                echo "Running ${VERSION}-${current_date_time} on ${env.JENKINS_URL}"
+            }
         }
     }
 }
