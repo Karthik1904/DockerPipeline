@@ -4,12 +4,10 @@ podTemplate(
   ],
   volumes: []) {
     node(POD_LABEL) {
-        environment { 
+        stage('Checkout Code & Build Image') {  
             NAME = "myapp"
             VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
             IMAGE = "${NAME}:${VERSION}"
-        }
-        stage('Checkout Code & Build Image') {  
             echo "Running ${VERSION} on ${env.JENKINS_URL}"
         }
     }
