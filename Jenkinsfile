@@ -16,7 +16,7 @@ podTemplate(
                 sh """ls"""
               
                 def config = readYaml file: "deployment.azure.yaml"
-                echo "Log ${config}"
+                echo "Log ${config[0].spec.template.spec.containers[0].image}"
                 writeYaml file: "deployment.azurem.yaml", data: config
               
                 sh """cat deployment.azurem.yaml"""
