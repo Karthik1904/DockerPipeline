@@ -16,7 +16,7 @@ podTemplate(
                 sh """ls"""
               
                 def config = readYaml file: "deployment.azure.yaml"
-                config.metadata.name = "izdeployments.azurecr.io/backend-dev:${C_DATE.format("dd-MM-yyyy")}-build-${VERSION}"
+                echo "Log ${config.metadata}"
                 writeYaml file: "deployment.azurem.yaml", data: config
               
                 sh """cat deployment.azurem.yaml"""
