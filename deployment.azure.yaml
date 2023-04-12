@@ -1,0 +1,90 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: ibwms-backend-zestfloor-machineshop-dev
+  namespace: ibwms-zestfloor-machineshop
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: ibwms-backend-zestfloor-machineshop-dev
+  template: 
+    metadata: 
+      labels: 
+        app: ibwms-backend-zestfloor-machineshop-dev
+    spec: 
+      containers: 
+        -
+          image: "izdeployments.azurecr.io/backend-dev:31-03-2023-1"
+          imagePullPolicy: Always
+          name: ibwms-backend-zestfloor-machineshop-dev
+          ports: 
+            - 
+              containerPort: 80
+            - 
+              containerPort: 443
+          # resources: 
+            # limits: 
+              # #cpu: 1500m
+              # memory: 2048Mi
+            # requests: 
+              # #cpu: 600m
+              # memory: 1024Mi
+      imagePullSecrets: 
+        - 
+          name: acr-secret
+      nodeSelector: 
+        agentpool: appsnodepool
+---
+# https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
+kind: Service
+apiVersion: v1
+metadata:
+  name: ibwms-backend-zestfloor-machineshop-dev
+  namespace: ibwms-zestfloor-machineshop
+spec:
+  selector:
+    app: ibwms-backend-zestfloor-machineshop-dev
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ibwms-backend-zestfloor-machineshop-dev-ingress
+  namespace: ibwms-zestfloor-machineshop
+  annotations:
+    # use the shared ingress-appgw
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    #appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+    #appgw.ingress.kubernetes.io/backend-protocol: "http"
+    #appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Configure ModSecurity
+    #nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    #nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+    #nginx.ingress.kubernetes.io/modsecurity-transaction-id: "$request_id"
+    #nginx.ingress.kubernetes.io/modsecurity-snippet: |
+     # SecRuleEngine On
+spec:
+  tls:
+  - hosts:
+    -  test.domain.com   
+    secretName: ibwms-secret-tls  
+  rules:
+  - host: test.domain.com
+    http:
+     paths:
+      - path: /ibwms(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: ibwms-backend-zestfloor-machineshop-dev
+            port:
+              number: 80
