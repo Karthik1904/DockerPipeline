@@ -10,7 +10,7 @@ podTemplate(
                 VERSION = "${env.BUILD_ID}-${env.GIT_COMMIT}"
                 IMAGE = "${NAME}:${VERSION}"
                 def C_DATE = new Date()
-                echo "Running ${VERSION}-${C_DATE.format("dd-MM-yyyy")} on ${env.JENKINS_URL}"
+                echo "Running ${C_DATE.format("dd-MM-yyyy")}-Build-${VERSION} on ${env.JENKINS_URL}"
             }
         }
     }
