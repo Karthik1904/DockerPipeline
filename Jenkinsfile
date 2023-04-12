@@ -14,7 +14,7 @@ podTemplate(
                 echo "Running ${C_DATE.format("dd-MM-yyyy")}-build-${VERSION} on ${env.JENKINS_URL}"
               
                 def config = readYaml file: "deployment.azure.yaml"
-                config.spec.template.spec.containers[0].image = "izdeployments.azurecr.io/backend-dev:${C_DATE.format("dd-MM-yyyy")}-build-${VERSION}"
+                config.spec.template.spec.containers.image = "izdeployments.azurecr.io/backend-dev:${C_DATE.format("dd-MM-yyyy")}-build-${VERSION}"
                 writeYaml file: "deployment.azurem.yaml", data: config
               
                 sh """cat deployment.azurem.yaml"""
