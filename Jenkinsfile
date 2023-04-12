@@ -5,6 +5,10 @@ podTemplate(
   volumes: []) {
     node(POD_LABEL) {
         stage('Checkout Code & Build Image') {  
+            def buildNumber = env.BUILD_NUMBER as int
+            if (buildNumber > 1) milestone(buildNumber - 1)
+            milestone(buildNumber)
+          
             git branch: "master", url: "https://github.com/Karthik1904/DockerPipeline.git"
             container('buildkit') {
                 NAME = "myapp"
@@ -20,6 +24,8 @@ podTemplate(
                 writeYaml file: "deployment.azurem.yaml", data: config
               
                 sh """cat deployment.azurem.yaml"""
+              
+              
             }
         }
     }
