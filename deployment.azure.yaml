@@ -16,7 +16,7 @@ spec:
     spec: 
       containers: 
         -
-          image: "izdeployments.azurecr.io/backend-dev:31-03-2023-1"
+          image: "test.azurecr.io/backend-dev:31-03-2023-1"
           imagePullPolicy: Always
           name: ibwms-backend-zestfloor-machineshop-dev
           ports: 
