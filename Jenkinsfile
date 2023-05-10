@@ -2,7 +2,7 @@ podTemplate(
   containers: [
     containerTemplate(name: 'buildkit', image: 'moby/buildkit:master', ttyEnabled: true, privileged: true)
   ],
-  volumes: [secretVolume(secretName: 'docker-config', mountPath: '/root/.docker')]) {
+  volumes: []) {
     node(POD_LABEL) {
         stage('Copy Build Image From QA to Prod ACR') {  
             withCredentials([azureServicePrincipal(credentialsId: 'credentials_id',
