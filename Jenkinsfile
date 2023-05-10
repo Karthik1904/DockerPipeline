@@ -5,8 +5,7 @@ podTemplate(
   volumes: []) {
     node(POD_LABEL) {
         stage('Copy Build Image From QA to Prod ACR') {  
-            withCredentials([azureServicePrincipal(
-                                                subscriptionIdVariable: '655cc16a-8ba1-4946-a06b-de89f485af5c',
+            withCredentials([azureServicePrincipal(subscriptionIdVariable: '655cc16a-8ba1-4946-a06b-de89f485af5c',
                                                 clientIdVariable: '03eed3d9-9b2f-4d49-a7f3-c6dbcf4025e1',
                                                 clientSecretVariable: '5QU8Q~vE9Qsi7VFdfkHYStgnJ3f9yGGMbow3ycAF',
                                                 tenantIdVariable: 'c4b27970-fe8c-49c3-993b-07efb3307e33')]) {
